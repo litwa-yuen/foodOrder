@@ -1,0 +1,136 @@
+/* Updated styles to fill each row horizontally with equal spacing */
+.order-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* Display orders in one column */
+}
+
+.order-item {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row; /* Display order details, item list, and action buttons in one column */
+  align-items: flex-start; /* Align items to the start of the row */
+}
+
+.order-details {
+  display: flex;
+  flex: 1;
+}
+
+.order-details div {
+  padding: 10px;
+}
+
+.item-list {
+  list-style: none;
+  padding: 0;
+  flex: 1;
+}
+
+.item {
+  margin-top: 10px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.process-button,
+.complete-button,
+.abort-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+/* Override the color for the Abort button */
+.abort-button {
+  background-color: #ff0000; /* Red color */
+}
+.complete-button {
+  background-color: #4caf50;
+}
+.process-button:hover {
+  background-color: #0056b3;
+}
+
+.abort-button:hover {
+  background-color: #ff3333;
+}
+.complete-button:hover {
+  background-color: #45a049; /* Darker green color on hover */
+}
+/* Container styles */
+.container {
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Styles for when the user is signed in */
+.signed-in {
+  text-align: center;
+}
+
+.sign-out-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 60px;
+  margin-right: 15px;
+}
+
+/* Styles for when the user is signed out */
+.signed-out {
+  text-align: center;
+}
+
+.sign-in-button {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sign-in-button:hover {
+  background-color: #0056b3;
+}
+.filter-buttons {
+  display: flex;
+  justify-content: space-between; /* Space evenly */
+  background-color: #f2f2f2; /* Background color for the tab bar */
+  padding: 10px;
+}
+
+.filter-button {
+  flex: 1; /* Each button takes equal space */
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-button.active {
+  background-color: #007bff; /* Active button background color */
+  color: #fff; /* Text color for active button */
+}
