@@ -34,6 +34,20 @@ const OrderScreen: React.FC = () => {
     where("status", "in", statusFilter)
   );
 
+  function createHouseFoodOrder(
+    docId: string,
+    data: DocumentData
+  ): HouseFoodOrder {
+    return {
+      orderId: docId,
+      items: data.items,
+      status: data.status,
+      createdDate: data.createdDate,
+      phone: data.phone,
+      phoneNotification: data.phoneNotification,
+    };
+  }
+
   const showOrdersByFilter = (filterValue: string) => {
     if (filter === filterValue) {
       return;
@@ -159,12 +173,7 @@ const OrderScreen: React.FC = () => {
       const data = doc.data();
 
       // doc.data() is never undefined for query doc snapshots
-      const item: HouseFoodOrder = {
-        orderId: doc.id,
-        items: data.items,
-        status: data.status,
-        createdDate: data.createdDate,
-      };
+      const item = createHouseFoodOrder(doc.id, data);
 
       orders.push(item);
     });
@@ -240,12 +249,10 @@ const OrderScreen: React.FC = () => {
           const data = change.doc.data();
 
           // Create a new order item
-          const newItem: HouseFoodOrder = {
-            orderId: change.doc.id,
-            items: data.items,
-            status: data.status,
-            createdDate: data.createdDate,
-          };
+          const newItem: HouseFoodOrder = createHouseFoodOrder(
+            change.doc.id,
+            data
+          );
 
           // Create a new array that combines existing orders and the new order
           setHouseFoodOrder((prevOrders) => {
