@@ -1,16 +1,14 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
 const nodemailer = require("nodemailer");
 
-import { onDocumentCreated } from "firebase-functions/v2/firestore";
+import {
+  onDocumentCreated,
+  onDocumentUpdated,
+} from "firebase-functions/v2/firestore";
 const { onRequest } = require("firebase-functions/v2/https");
 const { setGlobalOptions } = require("firebase-functions/v2");
+const accountSid = "<TWILIO_ACCOUNT_SID>";
+const authToken = "<TWILIO_AUTH_TOKEN>";
+const twilioClient = require("twilio")(accountSid, authToken);
 const stripe = require("stripe")("<STRIPE_PRIVATE_KEY>");
 const corsWhitelist = ["<DOMAIN>"];
 
@@ -99,6 +97,28 @@ exports.processPayment = onRequest(
       }
     } else {
       res.status(405).send("Method Not Allowed");
+    }
+  }
+);
+
+exports.notifyCustomerOrder = onDocumentUpdated(
+  "orders/{orderId}",
+  async (event: any) => {
+    const snapshot = event.data.after;
+    if (!snapshot) {
+      console.log("No data associated with the event");
+      return;
+    }
+    const data = snapshot.data();
+    if (data.phoneNotification) {
+      console.log("notify customer");
+
+      const message = await twilioClient.messages.create({
+        body: `You order status: ${data.status}. Order id: ${snapshot.id}`,
+        from: "<TIWILO_NUMBER>",
+        to: data.phone,
+      });
+      console.log(`message status: ${message.status}`);
     }
   }
 );
