@@ -6,7 +6,7 @@ Before you begin, ensure you have met the following requirements:
 
 - Firebase Account: You need a Firebase account to handle authentication, database storage, and notifications.
 - Stripe Account: For handling payments, you need a Stripe account.
-- fill up configuration
+- fill up the configuration
 
 ## Installation
 
