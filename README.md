@@ -13,7 +13,7 @@ FoodOrder is a web and mobile application that simplifies the process of orderin
 
 #Web Screenshots:
 - Inital screen<br/>
-![alt tag](https://github.com/litwa-yuen/foodOrdaer/blob/main/screenshots/Screenshot%202023-09-04%20231324.png)
+![alt tag](https://github.com/litwa-yuen/foodOrder/blob/main/screenshots/Screenshot%202023-09-04%20231324.png)
 - Order list<br/>
 ![alt tag](https://github.com/litwa-yuen/foodOrder/blob/main/screenshots/Screenshot%202023-09-04%20232437.png)
 - Checkout cart <br/>
