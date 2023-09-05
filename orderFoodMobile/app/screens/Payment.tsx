@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { clearCart, getTotals } from "../CartReduser";
 import { useNavigation } from "@react-navigation/native";
+import PhoneInput from "react-native-phone-number-input";
 
 const Payment = () => {
   const stripe = useStripe();
@@ -26,11 +27,26 @@ const Payment = () => {
   const cart = useSelector((state: any) => state.cart);
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [phoneNotification, setPhoneNotification] = useState(false); // New state for the checkbox
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const phoneInput = useRef<PhoneInput>(null);
+  const [formattedPhone, setFormattedPhone] = useState("");
 
   useEffect(() => {
     dispatch(getTotals());
   }, [cart, dispatch]);
 
+  const isPayButtonDisable = () => {
+    if (phoneNotification) {
+      return (
+        phoneInput.current?.isValidNumber(phoneNumber) ||
+        isCheckoutInProgress ||
+        !isCardComplete
+      );
+    } else {
+      return isCheckoutInProgress || !isCardComplete;
+    }
+  };
   const handlePayment = async () => {
     if (isCheckoutInProgress) {
       return;
@@ -47,7 +63,7 @@ const Payment = () => {
     } else {
       try {
         const response = await fetch(
-          "https://<FIREBASE_DOMAIN>/processPayment",
+          "https://us-central1-foodorder-1a94b.cloudfunctions.net/processPayment",
           {
             method: "POST",
             headers: {
@@ -65,8 +81,10 @@ const Payment = () => {
         if (data.message === "Payment successful") {
           await addDoc(collection(firebaseDB, "orders"), {
             items: cart.cart,
-            status: "queue",
+            status: "queueing",
             createdDate: serverTimestamp(),
+            phoneNotification: phoneNotification,
+            phone: formattedPhone,
           });
 
           dispatch(clearCart());
@@ -103,6 +121,41 @@ const Payment = () => {
           }
         />
       </View>
+      {/* Checkbox for phone notifications */}
+      <View style={styles.formGroup}>
+        <TouchableOpacity
+          onPress={() => setPhoneNotification(!phoneNotification)}
+          style={styles.checkboxContainer}
+        >
+          <View style={styles.checkbox}>
+            {phoneNotification && <View style={styles.checked} />}
+          </View>
+          <Text style={styles.checkboxText}>
+            Receive order status notifications by phone
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {/* Phone number input */}
+      {phoneNotification && (
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Phone Number</Text>
+          <PhoneInput
+            ref={phoneInput}
+            defaultValue={phoneNumber}
+            defaultCode="US"
+            layout="first"
+            onChangeText={(text) => {
+              setPhoneNumber(text);
+            }}
+            onChangeFormattedText={(text) => {
+              setFormattedPhone(text);
+            }}
+            withDarkTheme
+            withShadow
+            autoFocus
+          />
+        </View>
+      )}
       <View style={styles.formGroup}>
         <View style={styles.flexContainer}>
           <Text style={styles.subtotal}>Subtotal: ${cart.cartTotalAmount}</Text>
@@ -111,11 +164,10 @@ const Payment = () => {
             style={[
               styles.payButton,
               {
-                backgroundColor:
-                  isCheckoutInProgress || !isCardComplete ? "#ccc" : "#007BFF",
+                backgroundColor: isPayButtonDisable() ? "#ccc" : "#007BFF",
               },
             ]}
-            disabled={isCheckoutInProgress || !isCardComplete}
+            disabled={isPayButtonDisable()}
           >
             <Text style={styles.payButtonText}>Pay</Text>
           </TouchableOpacity>
@@ -173,6 +225,36 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 16,
     marginTop: 10,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkboxText: {
+    fontSize: 16,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderColor: "#007BFF",
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  checked: {
+    width: 12,
+    height: 12,
+    backgroundColor: "#007BFF",
+    borderRadius: 2,
+  },
+  phoneInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
   },
 });
 
