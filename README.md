@@ -9,4 +9,4 @@ ordering food for restaurants
 
 #Mobile ScreenShots:
 - Inital screen<br/>
-![alt tag]([https://github.com/litwa-yuen/Application/blob/master/SwiftApplication/LookLOL/ScreenShot/newItialScreen.png](https://github.com/litwa-yuen/foodOrder/blob/main/screenshots/Screenshot_20230904_225342.png)https://github.com/litwa-yuen/foodOrder/blob/main/screenshots/Screenshot_20230904_225342.png)
+![alt tag](https://github.com/litwa-yuen/foodOrder/blob/main/screenshots/Screenshot_20230904_225342.png)
