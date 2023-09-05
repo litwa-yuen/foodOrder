@@ -4,8 +4,9 @@
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:
 
-- Firebase Account: You need a Firebase account to handle authentication, database storage, and notifications.
+- Firebase Account: You need a Firebase account to handle authentication, database backend function trigger, and hosting.
 - Stripe Account: For handling payments, you need a Stripe account.
+- Twilio Accout: For sms text messaging.
 - fill up the configuration
 
 ## Installation
