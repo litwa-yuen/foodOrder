@@ -1,4 +1,4 @@
-# Food Order (react and react native)
+## Food Order (react and react native)
 Food Order is a web and mobile application that simplifies the process of ordering food from restaurants. This application provides a seamless experience for customers to place orders, make payments, and receive notifications. Additionally, it offers restaurant owners a convenient platform to manage incoming orders.
 
 # Features:
